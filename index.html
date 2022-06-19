@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<link rel="icon" href="/web/img/favicon.ico" />
+		<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700|Noto+Sans+KR:400,700|Noto+Sans+SC:400,700|Noto+Sans+TC:400,700|Noto+Sans:400,700&amp;subset=japanese,korean,chinese-simplified,chinese-traditional" rel="stylesheet">
+		<title>Roon</title>
+		<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="display_ui.js" defer></script>
+		<style type="text/css">
+			body {
+				cursor: none;
+			}
+			#splash {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				position: fixed;
+				background: #232121;
+				transition: opacity 1s linear;
+			}
+			#uiParent {
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				opacity: 0;
+				overflow: hidden;
+				position: fixed;
+				background: #232121;
+				transition: opacity 1s linear;
+			}
+			#splashLogo {
+				flex-grow: 1;
+				background-image: url("img/splash_logo.svg");
+				background-repeat: no-repeat;
+				background-size: contain;
+				background-position: center;
+				transition: opacity 1s linear;
+			}
+			#helpIcon {
+				width: 24px;
+				height: 24px;
+				visibility: hidden;
+				opacity: 0.6;
+				transition: opacity 0.2s linear;
+			}
+			#helpIcon:hover {
+				opacity: 1;
+			}
+		</style>
+
+<style>
+    * {
+        box-sizing: border-box!important;
+    }
+    #background-split {
+        display: none!important;
+    }
+
+	#uiParent {
+		width: auto;
+		height: auto;
+		top: 40px;
+		left: 40px;
+		bottom: 40px;
+		right: 40px;
+	}
+
+    #uiParent #albumart {
+        background-color: transparent!important;
+        z-index: 3!important;
+        width: 50%!important;
+        height: auto!important;
+        left: 0!important;
+        bottom: 0!important;
+        position: absolute!important;
+        top: 0!important;
+    }
+
+    #albumart .front {
+        background-position: right center;
+    }
+
+    #lyricscontainer,
+    #background-artistart,
+    #lyricsicon,
+    #infocontainer #infoicon {
+        visibility: hidden !important;
+    }
+
+    #infocontainer {
+        top: 50% !important;
+        width: 50% !important;
+        left: auto !important;
+        bottom: auto !important;
+        right: 0 !important;
+        padding: 0 40px !important;
+        transform: translateY(-50%);
+    }
+
+    #infocontainer .linecontainer,
+	#infocontainer #progresstimecontainer
+    {
+        position: relative !important;
+    }
+
+    #infocontainer #progresstimecontainer {
+
+        margin-top: 20px;
+    }
+    
+</style>
+	</head>
+
+	<body style="background-color: black;">
+		<div id="uiParent"></div>
+		<div id="splash">
+			<div style="height: 10vh;"></div>
+			<div style="display: flex; flex-direction: row; width: 100%">
+				<div style="flex-grow: 1;"></div>
+				<a id="helpIcon" href="https://kb.roonlabs.com/Displays#Web_Display" target="_blank"><img src="img/display_help_icon.svg"></a>
+				<div style="width: 10vw;"></div>
+			</div>
+			<div style="flex-grow: 2"></div>
+			<div style="display: flex; flex-direction: row; flex-grow: 1; width: 100%;">
+				<div style="width: 10vw"></div>
+				<div id="splashLogo"></div>
+				<div style="width: 10vw"></div>
+			</div>
+			<div style="flex-grow: 3"></div>
+			<div style="height: 10vh;"></div>
+		</div>
+	</body>
+</html>

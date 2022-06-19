@@ -1,0 +1,567 @@
+<style type="text/css">
+#background-albumart {
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+#background-albumart div.front,#background-albumart div.back {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    animation-name: fadein;
+    animation-duration: 1s;
+    transition: opacity 1s linear;
+    will-change: opacity;
+}
+
+#background-artistart-blurred {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: block;
+    z-index: 1;
+    top:0;
+    left:0;
+    opacity:0;
+    width: 100%;
+    height: 80%;
+    transition: opacity 1s linear;
+}
+
+#background-artistart {
+    display: inline-block;
+    z-index: 2;
+    width: 100%;
+    height: 80%;
+    overflow: hidden;
+}
+
+#background-artistart div {
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+    transition: opacity 1s linear;
+    will-change: opacity;
+}
+
+#background-dimming {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: rgba(20,19,19,1); /* #141313, which is the same as the desktop client background dimming layer color */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    animation-name: fadein;
+    animation-duration: 1s;
+    transition: opacity 1s linear;
+    will-change: opacity;
+    z-index:2;
+    opacity:0;
+}
+
+#background-footer {
+    background: #2C2C2E;
+    opacity: 1;
+    height: 23%;
+}
+
+#background-split {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+#lyricscontainer {
+    opacity: 0;
+    z-index: 3;
+    width: 100%;
+    height: 77%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    transition: opacity 0.7s linear;
+}
+
+#background-lyrics {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#lyricscountdown {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    opacity: 0;
+    text-align: center;
+    font-size: 4vw;
+    font-family: "Lato", "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif;
+    font-weight: bold;
+    transition: opacity 0.7s linear;
+    will-change: opacity;
+}
+
+#lyricscountdown > * {
+    margin: 1.4vw;
+}
+
+#lyricscountdown > span {
+    color: white;
+    opacity: 0.4;
+    transition: opacity 0.2s linear;
+    will-change: opacity;
+}
+
+#lyricscountdown > span.active {
+    opacity: 1;
+}
+
+#lyricscountdown.reducedAnimation > span {
+    transition: none;
+}
+
+#lyricscountdownicon {
+    height: 2.5vw;
+    width: 2.5vw;
+    align-self: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+#lyricsicon {
+    opacity: 0;
+    height: 2.8vh;
+    width: 2.8vh;
+    z-index: 3;
+    position: absolute;
+    right: calc(10% + 9vh);
+    bottom: 24%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right bottom;
+    transition: opacity 1s linear;
+}
+
+#lyricstextcontainer {
+    background-color: transparent;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    -webkit-mask-image: linear-gradient(-180deg, rgba(0,0,0,0.00) 5%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%, rgba(0,0,0,0.00) 85%);
+    mask-image: linear-gradient(-180deg, rgba(0,0,0,0.00) 5%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%, rgba(0,0,0,0.00) 85%);
+}
+
+#lyricstextcontainer.reducedAlpha {
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
+.lyricstext {
+    width: 80%;
+    position: absolute;
+    top: 70vh;
+    left: 10vw;
+    margin: 0px;
+    padding: 0px;
+    color: white;
+    font-size: 3.3vw;
+    font-family: "Lato", "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif;
+    line-height: 150%;
+    font-weight: bold;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    transition: transform 0.7s cubic-bezier(0.70, 0, 0.30, 1);
+    will-change: transform;
+}
+
+.lyricstext > * {
+    opacity: 0.4;
+    padding: 0px;
+    margin: 3.1vw 0px 3.1vw 0px;
+    transition: transform 0.7s linear, opacity 0.7s linear;
+    will-change: opacity;
+    transform: scale(1); /* Edge won't smoothly transition back to original size without this */
+}
+
+#lyricstextcontainer.reducedAnimation .lyricstext > * {
+    opacity: 0.1;
+}
+
+.lyricstext > .current {
+    opacity: 1;
+    transform: scale(1.125);
+}
+
+#lyricstextcontainer.reducedAnimation .lyricstext > .current {
+    opacity: 1;
+}
+
+.lyricstext > .prevnext {
+    opacity: 0.6;
+}
+
+#lyricstextcontainer.reducedAnimation .lyricstext > .prevnext {
+    opacity: 0.4;
+}
+
+#albumart {
+    background-color: transparent;
+    z-index: 3;
+    width: 16%;
+    height: 33%;
+    left: 5%;
+    bottom: 5%;
+    position: fixed;
+}
+
+#albumart div {
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    animation-name: fadein;
+    animation-duration: 1s;
+    filter: drop-shadow(0px 0px 2.7vh rgba(0, 0, 0, 0.2));
+    transition: opacity 1s linear;
+}
+
+#albumart.reducedAlpha div {
+    filter: none;
+}
+
+#infocontainer {
+    position: absolute;
+    z-index: 4;
+    top: 80%;
+    left: 23%;
+    bottom: 5%;
+    right: 10%;
+}
+
+#infoicon {
+    position: absolute;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    top: 5%;
+    right: 0;
+    height: 5vh;
+    width: 10vh;
+}
+
+.linecontainer {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    position: absolute;
+    left: 0;
+}
+
+.linecontainer span {
+    font-family: "Lato", "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif;
+    font-weight: normal;
+    color: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    display: compact; 
+    position: absolute;
+    width: 93%;
+    transition: opacity 1s ease-out;
+}
+
+#line1container {
+    height: 7vh;
+    top: 5%;
+    margin-right: 5vh;
+}
+
+#line2container {
+    height: 5vh;
+    top: 40%;
+}
+
+#line1container span {
+    box-sizing: border-box;
+    font-size: 4vh;
+    padding-right: 5vh;
+    font-weight: bold;
+}
+
+#line2container span {
+    font-size: 3.2vh;
+}
+
+#progresstimecontainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 1%;
+    vertical-align: center;
+    align-items: center;
+    position: absolute;
+    top: 80%;
+    left: 0;
+    width: 100%;
+}
+
+.progresstime {
+    font-family: "Lato", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif;
+    font-weight: normal;
+    vertical-align: center;
+    color: #FFFFFF;
+    font-size: 2vh;
+    display: contents;
+    width: 5%;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+#totaltime {
+    text-align: right;
+}
+
+#progressbg {
+    background-color: #C6C7CA;
+    left: 0px;
+    bottom: 1.785vh;
+    width: 100%;
+    height: 0.83vh;
+    border-radius: 0.28vh;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s linear;
+}
+
+#progressbar {
+    background-color: #7574F3;
+    width: 0%;
+    height: 100%;
+    transition: width 1s linear;
+    will-change: width;
+}
+
+#waveformcontainer {
+    position: relative;
+    bottom: 0.2vh;
+    width: 99%;
+    top: 75%;
+    height: 4vh;
+    opacity: 0;
+    transition: opacity 1s linear;
+}
+
+#waveformprogresscontainer {
+    position:absolute;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+    width: 0%;
+    height: 100%;
+    transition: width 1s linear;
+    will-change: width;
+}
+
+.waveform {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#waveformbg {
+    z-index: 0;
+}
+
+#waveform {
+    z-index: 1;
+}
+
+.front {
+    z-index: 2;
+    opacity: 1;
+}
+
+.back {
+    z-index: 0;
+    opacity: 0;
+}
+
+.dead {
+    opacity: 0;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+</style>
+
+<style>
+    * {
+        box-sizing: border-box!important;
+    }
+    #background-split {
+        display: none!important;
+    }
+
+	#uiParent {
+		width: auto;
+		height: auto;
+		top: 80px;
+		left: 80px;
+		bottom: 80px;
+		right: 80px;
+	}
+
+    #uiParent #albumart {
+        background-color: transparent!important;
+        z-index: 3!important;
+        width: 50%!important;
+        height: auto!important;
+        left: 0!important;
+        bottom: 0!important;
+        position: absolute!important;
+        top: 0!important;
+    }
+
+    #albumart .front {
+        background-position: right center;
+    }
+
+    #lyricscontainer,
+    #background-artistart,
+    #lyricsicon,
+    #infocontainer #infoicon {
+        visibility: hidden !important;
+    }
+
+    #infocontainer {
+        top: 50% !important;
+        width: 50% !important;
+        left: auto !important;
+        bottom: auto !important;
+        right: 0 !important;
+        padding: 0 40px !important;
+        transform: translateY(-50%);
+    }
+
+    #infocontainer .linecontainer,
+	#infocontainer #progresstimecontainer
+    {
+        position: relative !important;
+    }
+
+    #infocontainer #progresstimecontainer {
+        margin-top: 20px;
+    }
+    
+</style>
+
+
+<div id="background-albumart">
+    <div class="back"></div>
+    <div class="front"></div>
+    <div id="background-dimming"></div>
+</div>
+<div id="background-artistart">
+    <div id="background-artistart-blurred"></div>
+    <div class="back"></div>
+    <div class="front"></div>
+</div>
+<div id="background-split">
+    <div style="flex-grow: 1;"></div>
+    <div id="background-footer"></div>
+</div>
+
+<div id="lyricscontainer">
+    <div id="background-lyrics">
+        <div style="flex-grow: 1;"></div>
+        <div id="lyricscountdown">
+            <span>3</span>
+            <span>2</span>
+            <span>1</span>
+            <div id="lyricscountdownicon" class="lyricsicon"></div>
+        </div>
+        <div style="flex-grow: 1;"></div>
+    </div>
+    <div id="lyricstextcontainer" class="reducedAlphaAvailable reducedAnimationAvailable">
+    </div>
+</div>
+<div id="infocontainer">
+    <div class="linecontainer" id="line1container">
+        <span class="back"></span>
+        <span class="front"></span>
+    </div>
+    <div class="linecontainer" id="line2container">
+        <span class="back"></span>
+        <span class="front"></span>
+    </div>
+    <div id="infoicon"></div>
+    <div id="progresstimecontainer" style="display: flex; flex-direction: row;">
+        <p id="progresstime" class="progresstime"></p>
+        <div id="progressbg">
+            <div id="progressbar"></div>
+        </div>
+        <div id="waveformcontainer">
+            <canvas id="waveformbg" class="waveform"></canvas>
+            <div id="waveformprogresscontainer">
+                <canvas id="waveform" class="waveform"></canvas>
+            </div>
+        </div>
+        <p id="totaltime" class="progresstime"></p>
+    </div>
+
+</div>
+<div id="lyricsicon" class="lyricsicon"></div>
+<div id="albumart" class="reducedAlphaAvailable">
+    <div class="back"></div>
+    <div class="front"></div>
+</div>
